@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Octo — Bağlantılar</title>
+<style>
+  /* Visual language of the app's "Toplu indirme" sheet: glass card, pill buttons, mono preview list. */
+  :root {
+    color-scheme: light dark;
+    --acc: #5B3FD6; --fg: #1d1d1f; --lbl: #6e6e73; --line: rgba(0,0,0,.06);
+    --page: radial-gradient(800px 600px at 12% 18%, #c9c0f4 0%, transparent 62%),
+            radial-gradient(700px 560px at 88% 26%, #c4aef0 0%, transparent 60%),
+            radial-gradient(800px 600px at 58% 100%, #b9d4f2 0%, transparent 62%), #e6e3f1;
+    --card: rgba(250,250,253,.74);
+    --card-edge: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 .5px rgba(255,255,255,.5), 0 0 0 .5px rgba(0,0,0,.14), 0 24px 60px rgba(0,0,0,.18);
+    --list: rgba(255,255,255,.5); --list-edge: inset 0 0 0 .5px rgba(0,0,0,.12);
+    --btn: rgba(255,255,255,.55);
+    --btn-edge: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 .5px rgba(255,255,255,.5), 0 0 0 .5px rgba(0,0,0,.13), 0 2px 6px rgba(0,0,0,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    /* #7A66F2 gives white text only 4.2:1; this slightly darker tone reaches 4.9:1. */
+    :root {
+      --acc: #6E58EE; --fg: #f5f5f7; --lbl: #a1a1a6; --line: rgba(255,255,255,.08);
+      --page: radial-gradient(800px 600px at 12% 18%, #2c2560 0%, transparent 62%),
+              radial-gradient(700px 560px at 88% 26%, #34265a 0%, transparent 60%), #17161d;
+      --card: rgba(40,40,46,.72);
+      --card-edge: inset 0 1px 0 rgba(255,255,255,.24), inset 0 0 0 .5px rgba(255,255,255,.1), 0 0 0 .5px rgba(0,0,0,.6), 0 24px 60px rgba(0,0,0,.55);
+      --list: rgba(255,255,255,.05); --list-edge: inset 0 0 0 .5px rgba(255,255,255,.14);
+      --btn: rgba(90,90,98,.42);
+      --btn-edge: inset 0 1px 0 rgba(255,255,255,.24), inset 0 0 0 .5px rgba(255,255,255,.1), 0 0 0 .5px rgba(0,0,0,.5);
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 48px 16px; background: var(--page); background-attachment: fixed; color: var(--fg);
+         font: 13px/16px -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 720px; margin: 0 auto; padding: 22px; border-radius: 26px; background: var(--card); box-shadow: var(--card-edge);
+         -webkit-backdrop-filter: blur(40px) saturate(190%); backdrop-filter: blur(40px) saturate(190%); }
+  h1 { font-size: 15px; line-height: 20px; margin: 0; }
+  .lbl { color: var(--lbl); }
+  #page { margin: 4px 0 16px; overflow-wrap: anywhere; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
+  #count { margin-right: auto; }
+  .btn { font: inherit; color: inherit; height: 30px; padding: 0 16px; border: 0; border-radius: 15px; background: var(--btn); box-shadow: var(--btn-edge);
+         -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%); white-space: nowrap; cursor: pointer; }
+  .btnp { color: #fff; background: linear-gradient(rgba(255,255,255,.22), rgba(255,255,255,0) 60%), var(--acc);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 3px 10px color-mix(in srgb, var(--acc) 35%, transparent); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  :focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+  ul { list-style: none; margin: 0; padding: 4px 10px; border-radius: 12px; background: var(--list); box-shadow: var(--list-edge);
+       max-height: calc(100vh - 300px); min-height: 120px; overflow: auto; }
+  li label { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--line); cursor: pointer; }
+  li:first-child label { border-top: 0; }
+  li input { grid-row: span 2; margin: 0; accent-color: var(--acc); width: 14px; height: 14px; align-self: center; }
+  .text { overflow-wrap: anywhere; }
+  .url { color: var(--lbl); font: 11px/14px "SF Mono", ui-monospace, Menlo, monospace; overflow-wrap: anywhere; }
+  #status { margin: 10px 0 0; min-height: 16px; }
+  .find { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .field { font: inherit; color: inherit; height: 30px; padding: 0 12px; border: 0; border-radius: 15px; background: var(--btn); box-shadow: var(--btn-edge); }
+  #filter { flex: 1; min-width: 140px; }
+  .opt { display: flex; align-items: center; gap: 6px; margin-top: 12px; cursor: pointer; }
+  .opt input { margin: 0; accent-color: var(--acc); width: 14px; height: 14px; }
+  .acts { display: flex; gap: 8px; align-items: center; margin-top: 22px; }
+  .acts span { flex: 1; }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Bu sayfadaki bağlantılar</h1>
+    <p id="page" class="lbl"></p>
+    <div class="find">
+      <input id="filter" class="field" type="search" placeholder="Ada veya adrese göre süz" aria-label="Bağlantıları süz">
+      <select id="ext" class="field" aria-label="Uzantıya göre seç"></select>
+    </div>
+    <div class="bar">
+      <span id="count" class="lbl"></span>
+      <button id="all" class="btn">Tümünü seç</button>
+      <button id="none" class="btn">Hiçbirini seçme</button>
+    </div>
+    <ul id="list"></ul>
+    <label class="opt"><input id="start" type="checkbox"> Hemen başlat <span class="lbl">(işaretsizse yalnız ana kuyruğa eklenir)</span></label>
+    <p id="status" role="status"></p>
+    <div class="acts">
+      <button id="close" class="btn">Kapat</button><span></span><button id="add" class="btn btnp">Seçilenleri Octo'ya ekle</button>
+    </div>
+  </main>
+  <script type="module" src="links.js"></script>
+</body>
+</html>

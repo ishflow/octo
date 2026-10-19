@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<meta charset="utf-8">
+<title>Octo video duman sayfası</title>
+<style>body{font:14px system-ui;margin:24px;max-width:720px}video{display:block;width:480px;height:270px;background:#000;margin:8px 0}</style>
+<h1>Octo video duman sayfası</h1>
+<p>Yerel fikstürler (engine/testdata/video). Eklenti düğmesi videoların sağ üstünde görünmeli.</p>
+
+<h2>1. Doğrudan dosya</h2>
+<video id="direct" src="/direct.mp4" controls muted playsinline></video>
+
+<h2>2. MSE (blob:) — HLS fMP4 parçaları sayfa betiğiyle beslenir</h2>
+<video id="mse" controls muted playsinline></video>
+<p id="mse-state">hazır değil</p>
+
+<h2>3. Elle denemek için akış adresleri</h2>
+<ul>
+  <li><a href="/hls-ts/master.m3u8">HLS TS master</a></li>
+  <li><a href="/hls-fmp4/index.m3u8">HLS fMP4</a></li>
+  <li><a href="/hls-fmp4-audio/master.m3u8">HLS fMP4 ayrı ses</a></li>
+  <li><a href="/hls-aes/index.m3u8">HLS AES-128 (korumalı)</a></li>
+  <li><a href="/hls-live/index.m3u8">HLS canlı</a></li>
+  <li><a href="/dash/manifest.mpd">DASH</a></li>
+  <li><a href="/dash-drm/manifest.mpd">DASH ContentProtection</a></li>
+</ul>
+<script>
+// Tarayıcı manifesti XHR ile çeker (webRequest m3u8 adresini görür), parçalar MediaSource'a eklenir.
+(async () => {
+  const state = document.getElementById("mse-state"), v = document.getElementById("mse");
+  try {
+    const base = "/hls-fmp4/";
+    const text = await (await fetch(base + "index.m3u8")).text();
+    const lines = text.split("\n").map((l) => l.trim());
+    const init = /URI="([^"]+)"/.exec(lines.find((l) => l.startsWith("#EXT-X-MAP")))[1];
+    const segs = lines.filter((l) => l && !l.startsWith("#"));
+    const ms = new MediaSource();
+    v.src = URL.createObjectURL(ms);
+    await new Promise((r) => ms.addEventListener("sourceopen", r, { once: true }));
+    const sb = ms.addSourceBuffer('video/mp4; codecs="avc1.42c00a,mp4a.40.2"');
+    for (const u of [init, ...segs]) {
+      sb.appendBuffer(await (await fetch(base + u)).arrayBuffer());
+      await new Promise((r) => sb.addEventListener("updateend", r, { once: true }));
+    }
+    ms.endOfStream();
+    state.textContent = "hazır: " + segs.length + " parça eklendi";
+  } catch (e) { state.textContent = "hata: " + e; }
+})();
+</script>

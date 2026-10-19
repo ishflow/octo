@@ -1,0 +1,9 @@
+hizli-indir
+*.part
+.DS_Store
+build/
+DerivedData/
+.superpowers/
+mac/HizliIndir.xcodeproj/
+mac/Octo.xcodeproj/
+dist/

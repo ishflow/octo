@@ -1,0 +1,74 @@
+name: Octo
+options:
+  bundleIdPrefix: com.uba
+  developmentLanguage: tr
+  deploymentTarget:
+    macOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: NO
+targets:
+  # Kaynak klasörleri eski adla (HizliIndir*) kalır; ürün, hedef ve şema Octo.
+  Octo:
+    type: application
+    platform: macOS
+    sources:
+      - path: HizliIndir
+        excludes: [Resources/ChromeExtension]
+      - path: HizliIndir/Resources/ChromeExtension
+        type: folder
+        buildPhase: resources
+    # GENERATE_INFOPLIST_FILE has no INFOPLIST_KEY for arrays; this file is merged into the generated plist.
+    info:
+      path: HizliIndir/Resources/Info.plist
+      properties:
+        CFBundleLocalizations: [tr, en]
+        # XcodeGen otherwise writes its own "1.0"/"1" here, which wins over MARKETING_VERSION.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSDownloadsFolderUsageDescription: Octo, indirdiğiniz dosyaları İndirilenler klasörüne kaydetmek ve yarım kalan indirmeleri sürdürmek için bu klasöre erişir.
+        # Dock drop of URLs only; no CFBundleURLTypes so Octo is not a default-browser candidate.
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: URL
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [public.url]
+    settings:
+      base:
+        PRODUCT_NAME: Octo
+        # APFS is case-insensitive: an "Octo" executable would be overwritten by the bundled "octo" engine.
+        EXECUTABLE_NAME: OctoApp
+        PRODUCT_BUNDLE_IDENTIFIER: com.uba.octo
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Octo
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_LSMinimumSystemVersion: "26.0"
+        ENABLE_APP_SANDBOX: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  OctoTests:
+    type: bundle.unit-test
+    platform: macOS
+    # Not hosted by the app: the app would start the engine. App sources but the @main entry are compiled in directly
+    # (the main window is rendered to PNG in tests).
+    sources:
+      - HizliIndirTests
+      - path: HizliIndir
+        excludes: [App.swift, "Resources/**"]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.uba.octo.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Octo:
+    build:
+      targets:
+        Octo: all
+    test:
+      targets: [OctoTests]

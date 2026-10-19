@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Octo</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --acc: #5B3FD6; --fg: #1d1d1f; --lbl: #6e6e73; --bg: #fff; --line: rgba(0,0,0,.08);
+    --ok: #1f7a35; --bad: #d70015; --off: rgba(0,0,0,.16);
+    --btn: rgba(0,0,0,.05); --btn-edge: inset 0 1px 0 rgba(255,255,255,.9), 0 0 0 .5px rgba(0,0,0,.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    /* #7A66F2 gives white text only 4.2:1; this slightly darker tone reaches 4.9:1. */
+    :root {
+      --acc: #6E58EE; --fg: #f5f5f7; --lbl: #a1a1a6; --bg: #2a2a2e; --line: rgba(255,255,255,.1);
+      --ok: #30d158; --bad: #ff453a; --off: rgba(255,255,255,.2);
+      --btn: rgba(255,255,255,.08); --btn-edge: inset 0 1px 0 rgba(255,255,255,.12), 0 0 0 .5px rgba(0,0,0,.5);
+    }
+  }
+  body { width: 320px; margin: 0; padding: 16px; box-sizing: border-box; background: var(--bg); color: var(--fg);
+         font: 13px/16px -apple-system, BlinkMacSystemFont, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  header { display: flex; align-items: center; gap: 10px; }
+  header img { width: 30px; height: 30px; border-radius: 8px; }
+  h1 { margin: 0; font-size: 13px; }
+  #status { font-size: 11px; color: var(--lbl); }
+  #status.ok { color: var(--ok); }
+  #status.bad { color: var(--bad); }
+  .rows { margin-top: 10px; border-top: 1px solid var(--line); }
+  .row { display: flex; align-items: center; gap: 10px; min-height: 34px; cursor: pointer; }
+  .row span { flex: 1; }
+  input.sw { appearance: none; width: 30px; height: 18px; border-radius: 9px; background: var(--off); position: relative; margin: 0; flex: none; cursor: pointer; transition: background .15s; }
+  input.sw:checked { background: var(--acc); }
+  input.sw::before { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: left .15s; }
+  input.sw:checked::before { left: 14px; }
+  .btn { font: inherit; color: inherit; width: 100%; height: 30px; margin-top: 6px; border: 0; border-radius: 15px; background: var(--btn); box-shadow: var(--btn-edge); cursor: pointer; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  :focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+  #note { margin: 10px 0 0; color: var(--bad); line-height: 1.4; }
+  #hint { margin: 12px 0 0; color: var(--lbl); font-size: 11px; line-height: 14px; }
+  @media (prefers-reduced-motion: reduce) { input.sw, input.sw::before { transition: none; } }
+</style>
+</head>
+<body>
+  <header>
+    <img src="icons/48.png" alt="">
+    <div><h1>Octo</h1><div id="status">● Kontrol ediliyor…</div></div>
+  </header>
+  <div class="rows">
+    <label class="row"><span>İndirmeleri yakala</span><input type="checkbox" id="enabled" class="sw" role="switch"></label>
+    <label class="row" id="siteRow" hidden><span id="siteName"></span><input type="checkbox" id="site" class="sw" role="switch"></label>
+    <label class="row" id="videoRow" hidden><span>Bu sitede video düğmesi</span><input type="checkbox" id="video" class="sw" role="switch"></label>
+  </div>
+  <button id="links" class="btn">Bu sayfadaki bağlantıları listele…</button>
+  <button id="open" class="btn">Octo'yu aç</button>
+  <p id="note" hidden>Octo uygulaması kurulu değil veya çalışmıyor. Uygulamayı kurup bir kez açın, ardından bu pencereyi yeniden açın. O zamana kadar indirmeler tarayıcıda devam eder.</p>
+  <p id="hint">Bağlantıya tıklayınca dosya Octo'ya gider. ⌥ basılı tutarsanız tarayıcı indirir.</p>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
