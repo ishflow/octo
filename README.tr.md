@@ -1,28 +1,83 @@
-# Octo
+<p align="center">
+  <img src="docs/media/banner.png" alt="Octo — macOS için indirme yöneticisi" width="100%">
+</p>
 
-[English](README.md)
+<p align="center">
+  <a href="https://github.com/ishflow/octo/releases/latest"><img src="https://img.shields.io/github/v/release/ishflow/octo?color=7c5cff&label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/macOS-26%2B-111?logo=apple" alt="macOS 26+">
+  <img src="https://img.shields.io/badge/engine-Go-00ADD8?logo=go&logoColor=white" alt="Go">
+  <img src="https://img.shields.io/badge/app-SwiftUI-F05138?logo=swift&logoColor=white" alt="SwiftUI">
+  <img src="https://img.shields.io/badge/extension-Chrome-4285F4?logo=googlechrome&logoColor=white" alt="Chrome extension">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7c5cff" alt="MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ishflow/octo/releases/latest"><b>İndir</b></a> ·
+  <a href="https://ishflow.com/tr/ai/projects/octo">Web sitesi</a> ·
+  <a href="#kurulum">Kurulum</a> ·
+  <a href="#sss">SSS</a> ·
+  <a href="README.md">English</a>
+</p>
 
 macOS için native indirme yöneticisi. Octo dosyayı parçalara böler ve birkaç bağlantıdan aynı anda indirir, yarım kalan indirmeyi sürdürür ve Chrome'daki indirmeleri devralır. Go indirme motoru, SwiftUI uygulaması (Liquid Glass) ve Chrome eklentisinden oluşur. Uygulama arayüzü Türkçedir.
 
-![Octo ana pencere](docs/img/main-window.png)
+<p align="center">
+  <a href="https://ishflow.com/tr/ai/projects/octo"><img src="docs/media/film.png" alt="Octo filmini izleyin (37 sn)" width="820"></a>
+</p>
 
 ## Özellikler
 
-- **Çok bağlantı.** Varsayılan 8 bağlantı (1, 2, 4, 8, 16, 24 ya da 32). İndirme tek bağlantıyla başlar, en erken 2 saniyede bir bağlantıyı ikiye katlar; motor her seferinde kalan en büyük parçayı ikiye böler.
-- **Devam.** Duraklatıp sürdürebilirsiniz; kesilen indirme ve yeniden başlayan motor kaldığı yerden sürer (sunucu `Range` destekliyorsa). Süresi dolan link **Bağlantıyı yenile…** ile (sağ tık menüsü) yenilenir; dosya boyutu aynıysa indirme kaldığı yerden sürer.
-- **Kuyruk ve zamanlayıcı.** Başlama ve durma saatli birden çok kuyruk, toplu indirme (**Toplu indirme…**) ve toplam hız sınırı. Zamanlayıcının ayrıntıları ve sınırları: [bilinen sınırlar](docs/BILINEN-SINIRLAR.md).
-- **Menü çubuğu simgesi.** Aktif indirmeler, toplam hız ve tümünü durdur düğmesi; pencereyi kapatsanız da indirmeler sürer.
-- **Chrome eklentisi.** Bir `.zip` ya da `.iso` linkine tıklayınca indirme tarayıcıda değil Octo'da başlar. Tarayıcının indirmesi için **Option** tuşuna basılı tutun. Sağ tık menüsünde "Octo ile indir" ve "Tüm linkleri Octo ile indir" vardır. Chrome ve Chromium tabanlı tarayıcılarla çalışır (Edge, Brave, Arc, Vivaldi…).
-- **Video yakalayıcı.** Sayfadaki videoların üstünde küçük bir indirme düğmesi çıkar. Düz video dosyalarını, HLS (`.m3u8`) ve DASH (`.mpd`) akışlarını indirir; kaliteyi seçebilirsiniz.
-  **DRM yok:** korumalı videolar (Widevine/FairPlay, şifreli HLS) indirilmez ve Octo korumayı aşmaya çalışmaz. Canlı yayınlar desteklenmez.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/speed.gif" alt="Çok bağlantı" width="100%">
+      <h3>Tek dosya. Çok bağlantı.</h3>
+      Varsayılan 8 bağlantı (1, 2, 4, 8, 16, 24 ya da 32). İndirme tek bağlantıyla başlar, 2 saniyede bir bağlantıyı ikiye katlar; motor her seferinde kalan en büyük parçayı ikiye böler.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/resume.gif" alt="Duraklat ve sürdür" width="100%">
+      <h3>Duraklat. Kapat. Sürdür.</h3>
+      Kesilen indirme ve yeniden başlayan motor kaldığı yerden sürer (sunucu <code>Range</code> destekliyorsa). Süresi dolan link <b>Bağlantıyı yenile…</b> ile yenilenir; boyut aynıysa indirme devam eder.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/chrome.gif" alt="Chrome eklentisi" width="100%">
+      <h3>Tarayıcıda tek tık.</h3>
+      Bir <code>.zip</code> ya da <code>.iso</code> linkine tıklayınca indirme Octo'da başlar. Tarayıcının indirmesi için <b>Option</b>'a basılı tutun ya da sayfadaki tüm linkleri seçin. Chrome, Edge, Brave, Arc, Vivaldi.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/video.gif" alt="Video indirme düğmesi" width="100%">
+      <h3>Videonun üstünde indirme düğmesi.</h3>
+      Düz video dosyaları, HLS (<code>.m3u8</code>) ve DASH (<code>.mpd</code>) akışları, kalite seçimiyle. Korumalı (DRM) videolar ve canlı yayınlar indirilmez.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/menu.gif" alt="Menü çubuğu" width="100%">
+      <h3>Hep bir bakış uzağınızda.</h3>
+      Menü çubuğunda aktif indirmeler, toplam hız ve tümünü durdur düğmesi. Pencereyi kapatsanız da indirmeler sürer.
+    </td>
+    <td width="50%" valign="top">
+      <h3>Dahası</h3>
+      <ul>
+        <li><b>Kuyruk ve zamanlayıcı:</b> başlama ve durma saatleri, toplu indirme, toplam hız sınırı.</li>
+        <li><b>Site girişleri</b> Keychain'de durur, yalnız <code>https://</code> adreslere gönderilir.</li>
+        <li><b>Komut satırı:</b> <code>octo URL</code> doğrudan indirir, <code>octo add URL</code> uygulamaya ekler.</li>
+        <li><b>Gizlilik:</b> telemetri yok, güncelleme denetimi yok.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-  ![Sayfadaki video indirme düğmesi](docs/test-results/chrome/03-video-menu-dogrudan.png)
-- **Site girişleri.** Site başına kullanıcı adı ve parola kaydedebilirsiniz (Keychain'de durur, yalnız `https://` adreslere gönderilir).
-- **Komut satırı.** `octo URL` doğrudan indirir, `octo add URL` çalışan uygulamaya ekler.
+## Ekran görüntüleri
 
-![Karşılama ekranı](docs/img/onboarding.png)
-
-![Sayfadaki bağlantılar penceresi ("Tüm linkleri Octo ile indir")](docs/test-results/chrome/01-links-sayfasi.png)
+<p align="center">
+  <img src="docs/img/main-window.png" alt="Octo ana pencere" width="820">
+</p>
+<p align="center">
+  <img src="docs/img/onboarding.png" alt="Karşılama ekranı" width="620">
+</p>
 
 ## Gereksinimler
 

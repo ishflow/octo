@@ -1,28 +1,83 @@
-# Octo
+<p align="center">
+  <img src="docs/media/banner.png" alt="Octo — a download manager for macOS" width="100%">
+</p>
 
-[Türkçe](README.tr.md)
+<p align="center">
+  <a href="https://github.com/ishflow/octo/releases/latest"><img src="https://img.shields.io/github/v/release/ishflow/octo?color=7c5cff&label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/macOS-26%2B-111?logo=apple" alt="macOS 26+">
+  <img src="https://img.shields.io/badge/engine-Go-00ADD8?logo=go&logoColor=white" alt="Go">
+  <img src="https://img.shields.io/badge/app-SwiftUI-F05138?logo=swift&logoColor=white" alt="SwiftUI">
+  <img src="https://img.shields.io/badge/extension-Chrome-4285F4?logo=googlechrome&logoColor=white" alt="Chrome extension">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7c5cff" alt="MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ishflow/octo/releases/latest"><b>Download</b></a> ·
+  <a href="https://ishflow.com/ai/projects/octo">Website</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#faq">FAQ</a> ·
+  <a href="README.tr.md">Türkçe</a>
+</p>
 
 A native download manager for macOS. Octo splits a file into parts and downloads them over several connections at once, resumes interrupted downloads, and takes over downloads from Chrome. It is a Go download engine, a SwiftUI app (Liquid Glass) and a Chrome extension. The app is in Turkish.
 
-![Octo main window](docs/img/main-window.png)
+<p align="center">
+  <a href="https://ishflow.com/ai/projects/octo"><img src="docs/media/film.png" alt="Watch the Octo film (37 s)" width="820"></a>
+</p>
 
 ## Features
 
-- **Multiple connections.** 8 connections by default (1, 2, 4, 8, 16, 24 or 32). A download starts with one connection and doubles it every 2 seconds; the engine always splits the largest remaining part in half.
-- **Resume.** Pause and continue; interrupted downloads and engine restarts pick up where they stopped (when the server supports `Range`). Expired links can be renewed with **Bağlantıyı yenile…** (right-click menu), and the download continues if the file size is unchanged.
-- **Queues and scheduler.** Several queues with start and stop times, batch downloads (**Toplu indirme…**) and a total speed limit. Details and limits of the scheduler: [known limits](docs/BILINEN-SINIRLAR.md).
-- **Menu bar icon.** Active downloads, total speed and a stop-all button; downloads keep running when you close the window.
-- **Chrome extension.** A click on a `.zip` or `.iso` link starts the download in Octo instead of the browser. Hold **Option** to let Chrome download instead. Right-click menu: "Octo ile indir" and "Tüm linkleri Octo ile indir". Works with Chrome and Chromium-based browsers (Edge, Brave, Arc, Vivaldi…).
-- **Video catcher.** A small download button appears on videos in the page. It handles plain video files, HLS (`.m3u8`) and DASH (`.mpd`) streams, and lets you pick the quality.
-  **No DRM:** protected videos (Widevine/FairPlay, encrypted HLS) are not downloaded and Octo does not try to bypass the protection. Live streams are not supported.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/speed.gif" alt="Many connections" width="100%">
+      <h3>One file. Many connections.</h3>
+      8 connections by default (1, 2, 4, 8, 16, 24 or 32). A download starts with one connection and doubles it every 2 seconds; the engine always splits the largest remaining part in half.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/resume.gif" alt="Pause and resume" width="100%">
+      <h3>Pause. Quit. Resume.</h3>
+      Interrupted downloads and engine restarts pick up where they stopped (when the server supports <code>Range</code>). Expired link? Renew it with <b>Bağlantıyı yenile…</b> and the download carries on if the size is unchanged.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/chrome.gif" alt="Chrome extension" width="100%">
+      <h3>One click in the browser.</h3>
+      A click on a <code>.zip</code> or <code>.iso</code> link starts the download in Octo. Hold <b>Option</b> to let Chrome download instead, or pick every link on a page. Chrome, Edge, Brave, Arc, Vivaldi.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/media/video.gif" alt="Video download button" width="100%">
+      <h3>A download button on the video.</h3>
+      Plain video files, HLS (<code>.m3u8</code>) and DASH (<code>.mpd</code>) streams, with a choice of quality. Protected (DRM) videos and live streams are not downloaded.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/media/menu.gif" alt="Menu bar" width="100%">
+      <h3>Always one glance away.</h3>
+      The menu bar shows active downloads, total speed and a stop-all button. Downloads keep running when you close the window.
+    </td>
+    <td width="50%" valign="top">
+      <h3>And more</h3>
+      <ul>
+        <li><b>Queues and scheduler</b> with start and stop times, batch downloads and a total speed limit.</li>
+        <li><b>Site logins</b> stored in the Keychain, sent only over <code>https://</code>.</li>
+        <li><b>Command line:</b> <code>octo URL</code> downloads directly, <code>octo add URL</code> hands it to the app.</li>
+        <li><b>Private:</b> no telemetry, no update check.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-  ![Video download button in a page](docs/test-results/chrome/03-video-menu-dogrudan.png)
-- **Site logins.** Save a username and password per site (stored in the Keychain, sent only over `https://`).
-- **Command line.** `octo URL` downloads directly, `octo add URL` adds it to the running app.
+## Screenshots
 
-![Welcome screen](docs/img/onboarding.png)
-
-![Page links picker ("Tüm linkleri Octo ile indir")](docs/test-results/chrome/01-links-sayfasi.png)
+<p align="center">
+  <img src="docs/img/main-window.png" alt="Octo main window" width="820">
+</p>
+<p align="center">
+  <img src="docs/img/onboarding.png" alt="Welcome screen" width="620">
+</p>
 
 ## Requirements
 
